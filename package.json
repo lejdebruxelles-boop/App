@@ -1,0 +1,72 @@
+{
+  "name": "mozaik",
+  "productName": "Mozaik",
+  "version": "1.0.0",
+  "description": "Mozaik — un puzzle de couleurs quotidien. Daily color puzzle.",
+  "author": "Julien Antonis",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "ios:sync": "npm run build && npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "assets": "npx @capacitor/assets generate --ios --iconBackgroundColor '#14121f' --splashBackgroundColor '#14121f'",
+    "desktop": "npm run build && electron .",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mac": "npm run build && electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.antonis.mozaik",
+    "productName": "Mozaik",
+    "directories": {
+      "output": "release",
+      "buildResources": "resources"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "appx"
+      ],
+      "icon": "resources/icon.png"
+    },
+    "appx": {
+      "identityName": "Mozaik",
+      "publisherDisplayName": "Julien Antonis",
+      "displayName": "Mozaik"
+    },
+    "nsis": {
+      "oneClick": true
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.puzzle-games",
+      "icon": "resources/icon.png"
+    }
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6",
+    "vitest": "^5.1.0"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.6.0",
+    "@capacitor/share": "^8.0.3"
+  }
+}
