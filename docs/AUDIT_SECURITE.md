@@ -127,3 +127,12 @@
 3. Fermez la vidéo récompensée avant la fin : vous ne devez pas recevoir d'indice, et l'app doit continuer à répondre.
 4. Faites un achat en sandbox, annulez-le, puis faites-en un autre : l'annulation n'affiche pas d'erreur, l'achat active
    Mozaik+, et « Restaurer » fonctionne.
+
+### Résultats sur le simulateur iPhone 17 (iOS 27.2, Xcode 27.2) — 9 novembre 2026
+
+| Point | Résultat |
+|---|---|
+| 1. Démarrage sans écran blanc (CSP dans la WebView) | **OK** |
+| 2. Ordre consentement → suivi Apple → pubs | **OK** : `requestConsentInfo` → `showConsentForm` → `trackingAuthorizationStatus` → `initialize` → préchargement. La demande Apple s'affiche maintenant en français (`fr.lproj/InfoPlist.strings`). Le formulaire RGPD complet n'apparaît qu'une fois le message « RGPD » créé dans AdMob (Confidentialité et messages) avec votre vrai identifiant d'app |
+| 3. Vidéo récompensée | **OK** pour une vidéo regardée jusqu'au bout : indice donné, écouteurs retirés, vidéo suivante préchargée. La fermeture avant la fin n'est pas testable avec la vidéo de test de Google (5 s, récompense immédiate) : à refaire sur iPhone avec les vraies pubs. Couvert par les tests unitaires |
+| 4. Achat sandbox | **Non testé** : il faut la clé RevenueCat `appl_…` et un vrai iPhone connecté à un compte sandbox |

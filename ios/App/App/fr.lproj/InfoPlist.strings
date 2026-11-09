@@ -1,0 +1,2 @@
+/* Message shown by iOS in the App Tracking Transparency prompt (French). */
+"NSUserTrackingUsageDescription" = "Vos données serviront à vous montrer des publicités plus pertinentes. C'est ce qui permet à Mozaik de rester gratuit.";

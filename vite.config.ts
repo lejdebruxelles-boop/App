@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig, type Plugin } from "vite";
 
 // Content-Security-Policy injected into production builds (web, iOS WebView, Electron).
@@ -22,4 +23,7 @@ const csp = (): Plugin => ({
 });
 
 // base "./" so the same build works on the web, inside Capacitor (iOS) and Electron (file://).
-export default defineConfig({ base: "./", plugins: [csp()], build: { outDir: "dist", target: "es2020" } });
+export default defineConfig({ base: "./", plugins: [csp()], build: { outDir: "dist", target: "es2020" },
+  // Only our own tests: native build folders (ios/App/build) contain third-party test files.
+  test: { include: ["tests/**/*.test.ts"] },
+});
