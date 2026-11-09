@@ -26,5 +26,5 @@ export const CONFIG = {
   /** Links shown on the paywall (required by Apple for subscriptions). */
   privacyUrl: "https://mozaik-puzzle.netlify.app/privacy.html",
   termsUrl: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
-  appStoreUrl: "https://apps.apple.com/app/mozaik",
+  appStoreUrl: "https://apps.apple.com/app/id6832640365",
 };
