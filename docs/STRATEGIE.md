@@ -9,8 +9,7 @@
    chaque jour. Or l'algorithme de l'App Store favorise les apps qui gardent leurs utilisateurs.
 3. **Universel.** Il n'y a pas de texte à lire pour jouer : ça marche dans tous les pays. Les 6 langues ouvrent
    6 marchés dès le premier jour.
-4. **Coût nul.** Pas de serveur, pas de compte et pas de données personnelles, donc une revue Apple simple
-   et une étiquette de confidentialité « Aucune donnée collectée ».
+4. **Coût nul.** Pas de serveur ni de compte à gérer. Les seuls services utilisés (RevenueCat, AdMob) sont gratuits.
 5. **Une base de code pour iPhone, Windows, Mac et le web.**
 
 ## Lancement : plan d'action
@@ -29,9 +28,11 @@
 - Demandez un avis dans l'app après une victoire « Parfait » (à ajouter avec le plugin
   `@capacitor-community/in-app-review`).
 
-**Ensuite : revenus**
-- Version gratuite + achat unique « Mozaik+ » (2,99 €) : indices illimités, thèmes de couleurs, archive des défis passés.
-- Ou publicités récompensées, uniquement pour obtenir un indice supplémentaire. Ne jamais interrompre une partie.
+**Revenus : intégrés dès la version 1** (détails et mise en place dans [MONETISATION.md](MONETISATION.md))
+- iPhone : abonnement **Mozaik+** (19,99 €/an avec 7 jours d'essai, 3,99 €/mois, 39,99 € à vie) et pubs AdMob
+  dosées pour les joueurs gratuits.
+- Windows : application payante à 2,99 € sur le Microsoft Store.
+- Web : démo gratuite limitée à 10 niveaux, qui renvoie vers l'App Store.
 
 ## Fiche App Store (à copier dans App Store Connect)
 
@@ -51,7 +52,9 @@
 > • Partagez votre score en emojis et défiez vos amis
 > • Séries, étoiles et statistiques
 > • Mode daltonien
-> • Sans compte, sans pub intrusive, 100 % hors-ligne
+> • Sans compte, jamais de pub pendant le défi du jour
+>
+> Mozaik+ : zéro pub, indices illimités, archives de tous les défis, thèmes exclusifs.
 
 **English**
 - Name: Mozaik – Color Puzzle
@@ -62,8 +65,8 @@
 > Tap a tile and it flips along with its four neighbours. Every day brings a new puzzle — the same for
 > everyone — getting harder from Monday to Sunday. Can you find the perfect solution?
 
-**Confidentialité** : « Aucune donnée collectée ». Il faut tout de même une URL de politique de confidentialité :
-une page web d'une ligne suffit, par exemple « Mozaik ne collecte aucune donnée personnelle ».
+**Confidentialité** : la politique est prête dans `public/privacy.html`. Les déclarations liées à AdMob sont
+détaillées dans `MONETISATION.md`.
 
 **Captures d'écran** : lancez le simulateur iPhone 6,9" dans Xcode, puis *File → Save Screen*. Prévoyez quatre écrans :
 l'accueil, une grille en cours, l'écran « Parfait ! » et les statistiques. Ajoutez une phrase d'accroche au-dessus

@@ -1,4 +1,5 @@
 import type { Lang } from "./i18n";
+import { CONFIG } from "./config";
 
 export interface DailyResult {
   moves: number;
@@ -16,10 +17,17 @@ export interface Save {
   levelStars: Record<number, number>;
   daily: Record<string, DailyResult>; // dateKey -> result
   hints: { date: string; left: number };
+  premium: boolean; // cached entitlement, refreshed from the store at launch
+  theme: string;
+  archive: Record<string, DailyResult>; // past dailies played from the archive (no streak impact)
+  levelsSinceAd: number;
+  wins: number;
+  reviewAsked: boolean;
+  paywallDate: string;
 }
 
 const KEY = "mozaik-save-v1";
-export const HINTS_PER_DAY = 3;
+export const HINTS_PER_DAY = CONFIG.freeHintsPerDay;
 
 const defaults = (): Save => ({
   lang: null,
@@ -30,6 +38,13 @@ const defaults = (): Save => ({
   levelStars: {},
   daily: {},
   hints: { date: "", left: HINTS_PER_DAY },
+  premium: false,
+  theme: "classic",
+  archive: {},
+  levelsSinceAd: 0,
+  wins: 0,
+  reviewAsked: false,
+  paywallDate: "",
 });
 
 export function load(): Save {

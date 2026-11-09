@@ -7,9 +7,15 @@
 - **Niveaux** : une progression infinie, du 3×3 au 6×6.
 - **Partage** : un résultat en emojis 🟥🟨🟦 à poster partout. C'est le moteur de croissance du jeu.
 - **Série 🔥, étoiles, statistiques, 3 indices par jour**
-- 6 langues (FR, EN, ES, DE, PT, IT), mode daltonien, vibrations, 100 % hors-ligne, aucune donnée collectée.
+- 6 langues (FR, EN, ES, DE, PT, IT), mode daltonien, vibrations, jouable hors-ligne.
+- **Monétisation** : abonnement **Mozaik+** (sans pub, indices illimités, archives, thèmes) via RevenueCat, et pubs AdMob
+  (vidéo récompensée et interstitielle dosée) pour les joueurs gratuits.
 
-Pourquoi cette idée, et comment obtenir des téléchargements : voir **[docs/STRATEGIE.md](docs/STRATEGIE.md)**.
+- Pourquoi cette idée, et comment obtenir des téléchargements : **[docs/STRATEGIE.md](docs/STRATEGIE.md)**
+- Comment gagner de l'argent et ce qu'il faut configurer : **[docs/MONETISATION.md](docs/MONETISATION.md)**
+
+> ⚠️ Avant de publier, remplissez `src/config.ts` (clé RevenueCat, IDs AdMob) et l'ID AdMob dans
+> `ios/App/App/Info.plist`. Tant que ce n'est pas fait, l'app tourne avec des pubs de test et sans achats.
 
 ## Une seule base de code, toutes vos plateformes
 
@@ -79,6 +85,9 @@ src/main.ts       interface (écrans, modales, partage)
 src/i18n.ts       traductions
 src/storage.ts    sauvegarde locale, séries, statistiques
 src/platform.ts   vibrations et partage natifs (iOS), repli web
+src/config.ts     ⚠️ clés et réglages de monétisation à remplir
+src/monetization.ts  achats (RevenueCat), pubs (AdMob), demande de note
+public/privacy.html  politique de confidentialité (obligatoire pour Apple)
 ios/              projet Xcode (Capacitor)
 electron/         application bureau
 tests/            tests du moteur

@@ -106,3 +106,30 @@ h1 { font-size: 44px; margin: 6px 0 0; letter-spacing: -1px; }
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
 @keyframes starIn { from { transform: scale(0) rotate(-90deg); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* monetization */
+.big.plus { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+.plus-on { color: var(--c1); font-weight: 600; margin: 0; }
+.plusbtn { background: linear-gradient(135deg, #8b5cf6, #ec4899); font-weight: 700; }
+button.link { background: none; color: var(--muted); padding: 8px; font-size: 14px; }
+button.link.plusbtn { color: #f0abfc; margin-top: 10px; }
+.paywall { display: flex; flex-direction: column; gap: 10px; }
+.logo.small { width: 64px; gap: 4px; }
+.logo.small span { border-radius: 5px; }
+.benefits { list-style: none; padding: 0; margin: 4px 0; text-align: left; display: grid; gap: 8px; font-size: 16px; }
+.benefits li { background: var(--bg2); border-radius: 12px; padding: 10px 14px; }
+.offers { display: grid; gap: 8px; }
+.offer { position: relative; display: flex; justify-content: space-between; align-items: center; border: 2px solid transparent; background: var(--bg2); text-align: left; }
+.offer.sel { border-color: var(--accent); }
+.offer em { position: absolute; top: -9px; right: 12px; background: #ec4899; font-style: normal; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+.offer span { color: var(--muted); font-size: 13px; }
+a.button { display: block; text-decoration: none; color: inherit; border-radius: var(--radius); padding: 14px; background: var(--accent); font-weight: 700; }
+.fine { font-size: 12px; }
+.fine a { color: var(--muted); }
+.spinner { width: 28px; height: 28px; margin: 8px auto; border: 3px solid var(--bg2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+.card.wide { max-width: 460px; max-height: 88vh; overflow-y: auto; }
+.archive { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; margin-top: 10px; }
+.archive button { display: flex; flex-direction: column; padding: 10px 4px; font-weight: 700; background: var(--bg2); }
+.archive button small { font-weight: 400; font-size: 11px; color: var(--c1); min-height: 14px; }
+.archive button.done { outline: 2px solid rgba(255,255,255,.12); }
+@keyframes spin { to { transform: rotate(360deg); } }

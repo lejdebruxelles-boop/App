@@ -29,4 +29,3 @@ export async function shareText(text: string): Promise<boolean> {
   return false;
 }
 
-export const STORE_URL = "https://apps.apple.com/app/mozaik"; // replace with your App Store link after release
