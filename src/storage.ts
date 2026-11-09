@@ -47,12 +47,67 @@ const defaults = (): Save => ({
   paywallDate: "",
 });
 
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const LANG_CODES = ["fr", "en", "es", "de", "pt", "it"];
+
+const isObj = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
+const int = (v: unknown, min: number, max: number, def: number) =>
+  typeof v === "number" && Number.isInteger(v) && v >= min && v <= max ? v : def;
+
+function cleanResults(v: unknown): Record<string, DailyResult> {
+  const out: Record<string, DailyResult> = {};
+  if (!isObj(v)) return out;
+  for (const [k, r] of Object.entries(v)) {
+    if (!DATE_RE.test(k) || !isObj(r)) continue;
+    out[k] = {
+      moves: int(r.moves, 0, 10000, 0),
+      par: int(r.par, 0, 1000, 0),
+      stars: int(r.stars, 1, 3, 1),
+      hinted: r.hinted === true,
+    };
+  }
+  return out;
+}
+
+/** Validates every field: a corrupted or hand-edited save can never crash the app or inject markup. */
+export function sanitize(raw: unknown): Save {
+  const d = defaults();
+  if (!isObj(raw)) return d;
+  const levelStars: Record<number, number> = {};
+  if (isObj(raw.levelStars)) {
+    for (const [k, v] of Object.entries(raw.levelStars)) {
+      const lv = Number(k);
+      if (Number.isInteger(lv) && lv > 0 && lv < 1e6) levelStars[lv] = int(v, 1, 3, 1);
+    }
+  }
+  const hints = isObj(raw.hints) && typeof raw.hints.date === "string" && DATE_RE.test(raw.hints.date)
+    ? { date: raw.hints.date, left: int(raw.hints.left, 0, 100, HINTS_PER_DAY) }
+    : d.hints;
+  return {
+    lang: typeof raw.lang === "string" && LANG_CODES.includes(raw.lang) ? (raw.lang as Lang) : null,
+    haptics: raw.haptics !== false,
+    symbols: raw.symbols === true,
+    seenTutorial: raw.seenTutorial === true,
+    level: int(raw.level, 1, 1e6, 1),
+    levelStars,
+    daily: cleanResults(raw.daily),
+    hints,
+    premium: raw.premium === true,
+    theme: typeof raw.theme === "string" && /^[a-z]{1,20}$/.test(raw.theme) ? raw.theme : "classic",
+    archive: cleanResults(raw.archive),
+    levelsSinceAd: int(raw.levelsSinceAd, 0, 1e6, 0),
+    wins: int(raw.wins, 0, 1e9, 0),
+    reviewAsked: raw.reviewAsked === true,
+    paywallDate: typeof raw.paywallDate === "string" && DATE_RE.test(raw.paywallDate) ? raw.paywallDate : "",
+  };
+}
+
 export function load(): Save {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return { ...defaults(), ...JSON.parse(raw) };
+    if (raw) return sanitize(JSON.parse(raw));
   } catch {
-    /* storage unavailable: play without persistence */
+    /* storage unavailable or corrupted: start fresh */
   }
   return defaults();
 }

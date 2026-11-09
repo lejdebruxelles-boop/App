@@ -1,5 +1,5 @@
 // Six languages from day one: each translated store listing is a new market.
-const dict = {
+export const dict = {
   fr: {
     plusTag: "Mozaik+", plusTitle: "Passez à Mozaik+", bNoAds: "Zéro publicité", bHints: "Indices illimités",
     bArchive: "Tous les défis passés", bThemes: "Thèmes de couleurs exclusifs", bestValue: "Meilleure offre",
@@ -158,6 +158,7 @@ export function detectLang(): Lang {
 }
 
 export function setLang(l: Lang) {
+  if (!(l in dict)) l = "en";
   current = l;
   document.documentElement.lang = l;
 }

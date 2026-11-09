@@ -2,6 +2,8 @@ name: CI
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -10,5 +12,9 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci
-      - run: npm test
-      - run: npm run build
+      - name: Tests (moteur, sauvegarde, traductions, sécurité)
+        run: npm test
+      - name: Build (avec Content-Security-Policy)
+        run: npm run build
+      - name: Audit des dépendances livrées aux joueurs
+        run: npm audit --omit=dev --audit-level=moderate

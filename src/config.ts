@@ -23,7 +23,7 @@ export const CONFIG = {
   webFreeLevels: 10, // the web demo stops here and points to the App Store
 
   /** Links shown on the paywall (required by Apple for subscriptions). */
-  privacyUrl: "https://mozaik.app/privacy.html",
+  privacyUrl: "https://mozaik-puzzle.netlify.app/privacy.html",
   termsUrl: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
   appStoreUrl: "https://apps.apple.com/app/mozaik",
 };

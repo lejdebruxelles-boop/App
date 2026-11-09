@@ -30,7 +30,7 @@ const THEMES: Record<string, [string, string, string]> = {
 };
 
 function applyTheme() {
-  const name = isPremium() && THEMES[save.theme] ? save.theme : "classic";
+  const name = isPremium() && Object.hasOwn(THEMES, save.theme) ? save.theme : "classic";
   THEMES[name].forEach((c, i) => document.documentElement.style.setProperty(`--c${i}`, c));
 }
 
@@ -451,6 +451,7 @@ function showSettings() {
   m.querySelector("#privacy")?.addEventListener("click", showPrivacyOptions);
   m.querySelector<HTMLSelectElement>("#theme")!.addEventListener("change", (e) => {
     const v = (e.target as HTMLSelectElement).value;
+    if (!Object.hasOwn(THEMES, v)) return;
     if (v !== "classic" && !isPremium()) { showPaywall(); return; }
     save.theme = v;
     persist(save);
