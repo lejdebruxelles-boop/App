@@ -36,7 +36,7 @@
 
 ## Fiche App Store (à copier dans App Store Connect)
 
-**Nom** : Mozaik – Puzzle de couleurs
+**Nom** : Mozaik – Color Puzzle (« Mozaik » seul était déjà pris). Fiche complète : [FICHE_APP_STORE.md](FICHE_APP_STORE.md)
 **Sous-titre** (30 car.) : Un casse-tête par jour
 **Mots-clés** (100 car.) : `puzzle,casse-tête,logique,couleur,jeu du jour,cerveau,réflexion,grille,défi,quotidien,zen`
 
