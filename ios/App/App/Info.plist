@@ -23,8 +23,8 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GADApplicationIdentifier</key>
-	<!-- Google TEST app id: replace with your AdMob App ID (ca-app-pub-XXXX~YYYY) -->
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<!-- AdMob App ID of "Mozaik – Color Puzzle" -->
+	<string>ca-app-pub-1794379358634467~2670430677</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>Your data will be used to show you more relevant ads. This keeps Mozaik free.</string>
 	<key>SKAdNetworkItems</key>

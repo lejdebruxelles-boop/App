@@ -6,11 +6,12 @@ export const CONFIG = {
   /** Entitlement identifier created in RevenueCat that unlocks Mozaik+. */
   entitlement: "premium",
 
-  /** AdMob ad unit IDs. The defaults are Google's official TEST units (no revenue). */
+  /** AdMob ad unit IDs (account pub-1794379358634467, app "Mozaik – Color Puzzle"). */
   admob: {
-    interstitialIos: "ca-app-pub-3940256099942544/4411468910",
-    rewardedIos: "ca-app-pub-3940256099942544/1712485313",
-    /** Set to false once your real ad unit IDs are in place. */
+    interstitialIos: "ca-app-pub-1794379358634467/5376485065",
+    rewardedIos: "ca-app-pub-1794379358634467/3986160580",
+    /** true = Google test ads (TestFlight builds, never click real ads on your own phone).
+     *  Set to false only for the App Store release build. */
     testing: true,
   },
 
