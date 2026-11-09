@@ -1,6 +1,8 @@
 // Six languages from day one: each translated store listing is a new market.
 export const dict = {
   fr: {
+    autoRenew: "Abonnement renouvelé automatiquement au même prix, sauf résiliation au moins 24 h avant la fin de la période. Gérez-le dans Réglages › Identifiant Apple › Abonnements. Le paiement est débité sur votre compte Apple.",
+    shareFailed: "Partage impossible sur cet appareil",
     plusTag: "Mozaik+", plusTitle: "Passez à Mozaik+", bNoAds: "Zéro publicité", bHints: "Indices illimités",
     bArchive: "Tous les défis passés", bThemes: "Thèmes de couleurs exclusifs", bestValue: "Meilleure offre",
     trial: "{n} gratuits, puis", annual: "par an", monthly: "par mois", lifetime: "à vie, une seule fois",
@@ -24,6 +26,8 @@ export const dict = {
     inMoves: "en {n} coups",
   },
   en: {
+    autoRenew: "Subscription renews automatically at the same price unless cancelled at least 24 hours before the end of the period. Manage it in Settings › Apple ID › Subscriptions. Payment is charged to your Apple account.",
+    shareFailed: "Sharing is not available on this device",
     plusTag: "Mozaik+", plusTitle: "Get Mozaik+", bNoAds: "No ads, ever", bHints: "Unlimited hints",
     bArchive: "Every past daily puzzle", bThemes: "Exclusive color themes", bestValue: "Best value",
     trial: "{n} free, then", annual: "per year", monthly: "per month", lifetime: "lifetime, pay once",
@@ -47,6 +51,8 @@ export const dict = {
     inMoves: "in {n} moves",
   },
   es: {
+    autoRenew: "La suscripción se renueva automáticamente al mismo precio salvo que la canceles al menos 24 h antes del final del periodo. Gestiónala en Ajustes › ID de Apple › Suscripciones. El pago se carga a tu cuenta de Apple.",
+    shareFailed: "No se puede compartir en este dispositivo",
     plusTag: "Mozaik+", plusTitle: "Hazte Mozaik+", bNoAds: "Sin anuncios", bHints: "Pistas ilimitadas",
     bArchive: "Todos los retos pasados", bThemes: "Temas de color exclusivos", bestValue: "Mejor oferta",
     trial: "{n} gratis, luego", annual: "al año", monthly: "al mes", lifetime: "de por vida, pago único",
@@ -70,6 +76,8 @@ export const dict = {
     inMoves: "en {n} jugadas",
   },
   de: {
+    autoRenew: "Das Abo verlängert sich automatisch zum gleichen Preis, sofern es nicht mindestens 24 Stunden vor Ablauf gekündigt wird. Verwaltung unter Einstellungen › Apple-ID › Abonnements. Die Zahlung erfolgt über deinen Apple-Account.",
+    shareFailed: "Teilen ist auf diesem Gerät nicht möglich",
     plusTag: "Mozaik+", plusTitle: "Hol dir Mozaik+", bNoAds: "Keine Werbung", bHints: "Unbegrenzte Tipps",
     bArchive: "Alle vergangenen Tagesrätsel", bThemes: "Exklusive Farbthemen", bestValue: "Bestes Angebot",
     trial: "{n} gratis, dann", annual: "pro Jahr", monthly: "pro Monat", lifetime: "einmalig, für immer",
@@ -93,6 +101,8 @@ export const dict = {
     inMoves: "in {n} Zügen",
   },
   pt: {
+    autoRenew: "A assinatura renova automaticamente pelo mesmo preço, a menos que seja cancelada pelo menos 24 h antes do fim do período. Gerencie em Ajustes › ID Apple › Assinaturas. O pagamento é cobrado na sua conta Apple.",
+    shareFailed: "Não é possível compartilhar neste aparelho",
     plusTag: "Mozaik+", plusTitle: "Assine o Mozaik+", bNoAds: "Sem anúncios", bHints: "Dicas ilimitadas",
     bArchive: "Todos os desafios anteriores", bThemes: "Temas de cores exclusivos", bestValue: "Melhor oferta",
     trial: "{n} grátis, depois", annual: "por ano", monthly: "por mês", lifetime: "vitalício, pague uma vez",
@@ -116,6 +126,8 @@ export const dict = {
     inMoves: "em {n} jogadas",
   },
   it: {
+    autoRenew: "L'abbonamento si rinnova automaticamente allo stesso prezzo, salvo disdetta almeno 24 ore prima della fine del periodo. Gestiscilo in Impostazioni › ID Apple › Abbonamenti. Il pagamento è addebitato sul tuo account Apple.",
+    shareFailed: "Condivisione non disponibile su questo dispositivo",
     plusTag: "Mozaik+", plusTitle: "Passa a Mozaik+", bNoAds: "Zero pubblicità", bHints: "Aiuti illimitati",
     bArchive: "Tutte le sfide passate", bThemes: "Temi di colore esclusivi", bestValue: "Più conveniente",
     trial: "{n} gratis, poi", annual: "all'anno", monthly: "al mese", lifetime: "per sempre, una volta",

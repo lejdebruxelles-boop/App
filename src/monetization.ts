@@ -11,11 +11,14 @@ export const platform: Platform = Capacitor.getPlatform() === "ios"
   ? "ios"
   : navigator.userAgent.includes("Electron") ? "desktop" : "web";
 
+export type TrialUnit = "day" | "week" | "month" | "year";
+
 export interface Offer {
   id: string;
   kind: "annual" | "monthly" | "lifetime" | "other";
   price: string;
-  trial: string | null; // e.g. "7 days" when an intro offer exists
+  trial: { n: number; unit: TrialUnit } | null; // free intro offer, e.g. 7 days
+  renews: boolean; // auto-renewable subscription (Apple requires saying so on the paywall)
   pkg: unknown; // native package object, passed back to purchase()
 }
 
@@ -78,9 +81,10 @@ export async function getOffers(): Promise<Offer[]> {
         : p.packageType === "MONTHLY" ? "monthly"
         : p.packageType === "LIFETIME" ? "lifetime" : "other";
       const intro = p.product.introPrice;
-      const trial = intro && intro.price === 0
-        ? `${intro.periodNumberOfUnits} ${intro.periodUnit.toLowerCase()}` : null;
-      return { id: p.identifier, kind, price: p.product.priceString, trial, pkg: p };
+      const unit = intro?.periodUnit?.toLowerCase();
+      const trial = intro && intro.price === 0 && (unit === "day" || unit === "week" || unit === "month" || unit === "year")
+        ? { n: intro.periodNumberOfUnits, unit: unit as TrialUnit } : null;
+      return { id: p.identifier, kind, price: p.product.priceString, trial, renews: kind === "annual" || kind === "monthly", pkg: p };
     })
     .sort((a, b) => order[a.kind] - order[b.kind]);
 }
@@ -95,7 +99,9 @@ export async function purchase(offer: Offer): Promise<boolean> {
     setPremium(ok);
     return ok;
   } catch (e) {
-    if ((e as { userCancelled?: boolean }).userCancelled) return false;
+    // Native errors arrive as { code, data: { userCancelled, ... } }; code "1" = PURCHASE_CANCELLED.
+    const err = e as { code?: string | number; userCancelled?: boolean; data?: { userCancelled?: boolean } };
+    if (err.userCancelled || err.data?.userCancelled || String(err.code) === "1") return false;
     throw e;
   }
 }
@@ -110,18 +116,26 @@ export async function restore(): Promise<boolean> {
 }
 
 // ---------- ads ----------
+// Order required by Google UMP and GDPR: consent first, and the ads SDK is started and ads are requested
+// only when `canRequestAds` is true. If consent information cannot be obtained (offline, error), no ads.
 async function initAds() {
   const { AdMob, AdmobConsentStatus } = await import("@capacitor-community/admob");
-  await AdMob.initialize({ initializeForTesting: CONFIG.admob.testing });
-  // GDPR (EU/UK) consent form, then Apple's App Tracking Transparency prompt.
+  let canRequestAds = false;
   try {
-    const consent = await AdMob.requestConsentInfo();
+    let consent = await AdMob.requestConsentInfo();
     if (consent.isConsentFormAvailable && consent.status === AdmobConsentStatus.REQUIRED) {
-      await AdMob.showConsentForm();
+      consent = await AdMob.showConsentForm();
     }
+    canRequestAds = consent.canRequestAds;
+  } catch {
+    canRequestAds = false;
+  }
+  if (!canRequestAds) return;
+  try {
     const att = await AdMob.trackingAuthorizationStatus();
     if (att.status === "notDetermined") await AdMob.requestTrackingAuthorization();
-  } catch { /* ads still work, non-personalised */ }
+  } catch { /* ATT unavailable: Google serves non-personalised ads */ }
+  await AdMob.initialize({ initializeForTesting: CONFIG.admob.testing });
   adsReady = true;
   preloadInterstitial();
   preloadRewarded();
@@ -149,19 +163,36 @@ export function rewardedAvailable() {
   return platform === "ios" && adsReady && !premium;
 }
 
-/** Shows a rewarded video. Resolves true if the player earned the reward. */
+let rewardedShowing = false;
+
+/**
+ * Shows a rewarded video. Resolves true only if the player earned the reward.
+ * The native call resolves only on reward, so closing the video early or a presentation failure is
+ * detected through the Dismissed / FailedToShow events; otherwise the promise would never settle.
+ */
 export async function showRewarded(): Promise<boolean> {
-  if (!rewardedAvailable()) return false;
-  const { AdMob } = await import("@capacitor-community/admob");
+  if (!rewardedAvailable() || rewardedShowing) return false;
+  rewardedShowing = true;
+  const { AdMob, RewardAdPluginEvents } = await import("@capacitor-community/admob");
+  const handles: { remove: () => Promise<void> }[] = [];
   try {
     if (!rewardedLoaded) await preloadRewarded();
+    if (!rewardedLoaded) return false;
     rewardedLoaded = false;
-    const reward = await AdMob.showRewardVideoAd();
+    const earned = await new Promise<boolean>((resolve) => {
+      let settled = false;
+      const done = (v: boolean) => { if (!settled) { settled = true; resolve(v); } };
+      AdMob.addListener(RewardAdPluginEvents.Dismissed, () => done(false)).then((h) => handles.push(h));
+      AdMob.addListener(RewardAdPluginEvents.FailedToShow, () => done(false)).then((h) => handles.push(h));
+      AdMob.showRewardVideoAd().then((r) => done(Boolean(r)), () => done(false));
+    });
     lastAdAt = Date.now();
-    return Boolean(reward);
+    return earned;
   } catch {
     return false;
   } finally {
+    rewardedShowing = false;
+    handles.forEach((h) => h.remove().catch(() => {}));
     preloadRewarded();
   }
 }

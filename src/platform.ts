@@ -19,13 +19,19 @@ export async function hapticWin() {
   } catch { /* noop */ }
 }
 
-/** Returns true if shared via a share sheet, false if copied to clipboard. */
-export async function shareText(text: string): Promise<boolean> {
+export type ShareResult = "shared" | "copied" | "failed";
+
+/** Share sheet when available, otherwise the clipboard. Reports what really happened. */
+export async function shareText(text: string): Promise<ShareResult> {
   try {
-    if (native) { await Share.share({ text }); return true; }
-    if (navigator.share) { await navigator.share({ text }); return true; }
+    if (native) { await Share.share({ text }); return "shared"; }
+    if (navigator.share) { await navigator.share({ text }); return "shared"; }
   } catch { /* user cancelled or unsupported → fall back */ }
-  try { await navigator.clipboard.writeText(text); } catch { /* noop */ }
-  return false;
+  try {
+    await navigator.clipboard.writeText(text);
+    return "copied";
+  } catch {
+    return "failed";
+  }
 }
 

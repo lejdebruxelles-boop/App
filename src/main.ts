@@ -51,6 +51,18 @@ let game: GameState | null = null;
 let timer: number | undefined;
 
 // ---------- helpers ----------
+/** Escapes text coming from outside the app (store prices…) before it goes into HTML. */
+const esc = (v: string) => v.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+/** "7 jours", "1 week"… localised by the platform (Intl unit formatting). */
+function trialLength(trial: NonNullable<Offer["trial"]>): string {
+  try {
+    return new Intl.NumberFormat(getLang(), { style: "unit", unit: trial.unit, unitDisplay: "long" }).format(trial.n);
+  } catch {
+    return `${trial.n} ${trial.unit}`;
+  }
+}
+
 const h = (html: string) => {
   const tpl = document.createElement("template");
   tpl.innerHTML = html.trim();
@@ -367,8 +379,9 @@ function showWin(animate: boolean) {
     ${isPremium() ? "" : `<button class="link plusbtn" id="plus">✨ ${t("plusTitle")}</button>`}`);
   m.querySelector("#plus")?.addEventListener("click", () => showPaywall());
   m.querySelector("#share")!.addEventListener("click", async () => {
-    const shared = await shareText(shareMessage(g, res));
-    if (!shared) toast(t("copied"));
+    const result = await shareText(shareMessage(g, res));
+    if (result === "copied") toast(t("copied"));
+    else if (result === "failed") toast(t("shareFailed"));
   });
   m.querySelector("#home")!.addEventListener("click", () => { closeModal(); renderHome(); });
   m.querySelector("#next")?.addEventListener("click", nextLevel);
@@ -487,6 +500,7 @@ function showPaywall(onSuccess?: () => void, onClose?: () => void) {
         ? `<a class="button primary" href="${CONFIG.appStoreUrl}" target="_blank" rel="noopener">${t("getApp")}</a>`
         : `<div class="spinner"></div>`}</div>
       <button class="primary" id="buy" hidden>${t("cta")}</button>
+      <p class="fine" id="renew" hidden>${t("autoRenew")}</p>
       <p class="fine">${t("cancelAnytime")} · <a href="${CONFIG.termsUrl}" target="_blank" rel="noopener">${t("terms")}</a> · <a href="${CONFIG.privacyUrl}" target="_blank" rel="noopener">${t("privacy")}</a></p>
       ${platform === "ios" ? `<button class="link" id="restore">${t("restore")}</button>` : ""}
       <button class="link" id="close">${t("close")}</button>
@@ -505,12 +519,14 @@ function showPaywall(onSuccess?: () => void, onClose?: () => void) {
     box.innerHTML = offers.map((o, i) => `
       <button class="offer" data-i="${i}">
         ${o.kind === "annual" ? `<em>${t("bestValue")}</em>` : ""}
-        <b>${o.trial ? `${t("trial", { n: o.trial })} ` : ""}${o.price}</b><span>${label(o)}</span>
+        <b>${o.trial ? `${esc(t("trial", { n: trialLength(o.trial) }))} ` : ""}${esc(o.price)}</b><span>${label(o)}</span>
       </button>`).join("");
+    const renew = m.querySelector<HTMLElement>("#renew")!;
     const pick = (i: number) => {
       selected = offers[i];
       box.querySelectorAll(".offer").forEach((b, j) => b.classList.toggle("sel", j === i));
       buy.textContent = selected.trial ? t("ctaTrial") : t("cta");
+      renew.hidden = !selected.renews;
     };
     box.querySelectorAll<HTMLElement>(".offer").forEach((b) => b.addEventListener("click", () => pick(Number(b.dataset.i))));
     pick(0);
@@ -535,6 +551,7 @@ function showPaywall(onSuccess?: () => void, onClose?: () => void) {
 }
 
 async function doRestore() {
+  if (!purchasesAvailable()) { toast(t("notReady")); return; }
   try {
     toast((await restore()) ? t("restored") : t("nothing"));
   } catch {
